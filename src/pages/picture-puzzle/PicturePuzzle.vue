@@ -1,8 +1,8 @@
 <!--
  * @Date: 2022-06-21 11:09:05
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 16:38:28
- * @FilePath: /shopify-management/src/components/PicturePuzzle.vue
+ * @LastEditTime: 2022-06-24 17:09:44
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/PicturePuzzle.vue
 -->
 <template>
   <div class="picture-puzzle">
@@ -11,8 +11,15 @@
     </div>
     <div class="picture-puzzle__content">
       <el-tabs tab-position="left" class="tab-wrapper">
-        <el-tab-pane label="用户管理" class="tab-pane">用户管理</el-tab-pane>
-        <el-tab-pane label="配置管理" class="tab-pane">配置管理</el-tab-pane>
+        <el-tab-pane label="背景" class="tab-pane">
+          <TabBackground :config="config" />
+        </el-tab-pane>
+        <el-tab-pane label="排版" class="tab-pane">
+          <TabComposing :config="config" />
+        </el-tab-pane>
+        <el-tab-pane label="尺寸" class="tab-pane">
+          <TabSize :config="config" />
+        </el-tab-pane>
       </el-tabs>
     </div>
     <div class="picture-puzzle__footer">
@@ -27,51 +34,24 @@
       <el-button type="primary" :icon="Plus" @click="handleAddCard">添加新配置</el-button>
     </div>
   </div>
-
-  <PicturePuzzleEdit v-if="visible" v-model:visible="visible" :data="editItem" @confirm="handleConfirmCard" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import PicturePuzzleEdit from './PicturePuzzleEdit.vue'
+import TabBackground from './tab-background/TabBackground.vue'
+import TabComposing from './tab-composing/TabComposing.vue'
+import TabSize from './tab-size/TabSize.vue'
 import { Plus } from '@element-plus/icons-vue'
 
-// 编辑
-const visible = ref(false)
-const editItem = ref(null)
-
-// 导入
-const handleImport = (e) => {
-  const file = e.target.files[0]
-  const reader = new FileReader()
-  reader.readAsText(file)
-  reader.onload = (e) => {
-    // const res = e.target.result
-  }
-}
-
-// 导出
-const handleExport = () => {
-  const link = document.createElement('a')
-  link.download = '配置.json'
-  link.style.display = 'none'
-  const json = JSON.stringify({
-  })
-  const blob = new Blob([json])
-  link.href = URL.createObjectURL(blob)
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
-
-// 临时缓存
-// const cacheConfig = () => {
-
-// }
+const config = ref({
+  background: [],
+  composing: [],
+  size: []
+})
 </script>
 
 <style lang="scss" scoped>
-@import "../common/sass/variables";
+@import "sass/variables";
 
 .picture-puzzle {
   width: 100vw;

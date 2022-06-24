@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-06-21 10:57:35
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-23 16:50:01
+ * @LastEditTime: 2022-06-24 17:10:58
  * @FilePath: /shopify-management/vite.config.js
  */
 import { defineConfig } from 'vite'
@@ -23,7 +23,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@/': `${srcPath}/`,
-      'comp/': `${srcPath}/components/`
+      'comp/': `${srcPath}/components/`,
+      'pages/': `${srcPath}/pages/`,
+      'sass/': `${srcPath}/common/sass/`
     }
   }
 })

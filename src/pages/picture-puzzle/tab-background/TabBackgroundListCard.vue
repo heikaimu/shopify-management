@@ -1,8 +1,8 @@
 <!--
  * @Date: 2022-06-21 13:50:03
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 17:27:30
- * @FilePath: /shopify-management/src/components/PicturePuzzleBackgroundCard.vue
+ * @LastEditTime: 2022-06-24 17:27:49
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-background/TabBackgroundListCard.vue
 -->
 <template>
   <el-card :body-style="{ padding: '0px' }">
@@ -94,8 +94,8 @@ const handleEdit = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "../common/sass/variables";
-@import "../common/sass/mixins";
+@import "sass/variables";
+@import "sass/mixins";
 
 .image {
   width: 300px;
