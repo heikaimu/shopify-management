@@ -1,0 +1,12 @@
+/* 改变主题色变量 */
+$--color-primary: #36A2EA !default;
+/// color|1|Functional Color|1
+$--color-success: #26A149 !default;
+/// color|1|Functional Color|1
+$--color-warning: #F7B217 !default;
+/// color|1|Functional Color|1
+$--color-danger: #ED158E !default;
+
+/* 改变 icon 字体路径变量，必需 */
+@import "element-plus/dist/index.css";
+@import "./components/el-drawer.scss";
