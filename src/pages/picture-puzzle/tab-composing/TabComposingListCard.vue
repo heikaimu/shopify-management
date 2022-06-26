@@ -24,7 +24,6 @@
 import { ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Renderer from 'fabric-renderer'
-import { WIDTH, HEIGHT } from '@/config'
 
 const props = defineProps({
   data: {
@@ -42,8 +41,8 @@ const loading = ref(false)
 const url = ref('')
 const generateURL = () => {
   const renderer = new Renderer('canvas', {
-    width: WIDTH,
-    height: HEIGHT,
+    width: props.data.width,
+    height: props.data.height,
     scale: 1,
     completeCustom: true,
     backgroundColor: '#f2f2f2'
@@ -94,8 +93,8 @@ const handleEdit = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "../common/sass/variables";
-@import "../common/sass/mixins";
+@import "sass/variables";
+@import "sass/mixins";
 
 .image {
   width: 300px;

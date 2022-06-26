@@ -7,10 +7,11 @@
 <template>
   <el-card :body-style="{ padding: '0px' }">
     <div v-loading="loading" class="image">
-      <img :src="url">
+      <img :src="cover">
     </div>
     <div style="padding: 14px">
       <span>{{ data.name || '无标题' }}</span>
+
       <div class="bottom">
         <el-button text class="button" @click="handleEdit">编辑</el-button>
         <el-divider direction="vertical" />
@@ -21,15 +22,17 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import Renderer from 'fabric-renderer'
-import { WIDTH, HEIGHT } from '@/config'
 
 const props = defineProps({
   data: {
     type: [Object, Number],
     default: () => { }
+  },
+  index: {
+    type: Number,
+    default: -1
   }
 })
 
@@ -39,27 +42,10 @@ const emits = defineEmits({
 })
 
 const loading = ref(false)
-const url = ref('')
-const generateURL = () => {
-  const renderer = new Renderer('canvas', {
-    width: WIDTH,
-    height: HEIGHT,
-    scale: 1,
-    completeCustom: true,
-    backgroundColor: '#f2f2f2'
-  })
+const cover = ref('')
 
-  loading.value = true
-  renderer.loadFromJSON(props.data.json, (instance, object) => { }, () => {
-    url.value = renderer.toDataURL(1)
-    loading.value = false
-  })
-}
-
-watch(props.data, () => {
-  generateURL()
-}, {
-  immediate: true
+watchEffect(() => {
+  cover.value = props.data.images[0].url
 })
 
 const handleDelete = () => {
@@ -89,7 +75,7 @@ const handleDelete = () => {
 }
 
 const handleEdit = () => {
-  emits('edit')
+  emits('edit', props.data, props.index)
 }
 </script>
 

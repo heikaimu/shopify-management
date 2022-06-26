@@ -6,17 +6,31 @@
 -->
 <template>
   <div class="background">
-    <TabBackgroundList :list="list" @edit="editCard(item, index)" @delete="deleteCard(item, index)" />
-    <el-button class="fixed-button" type="success" :icon="Plus" circle />
+    <TabBackgroundList :list="list" @edit="editCard" @delete="deleteCard" />
+    <ButtonCircleFixed @click="handleAdd" />
+    <TabBackgroundEdit v-model:visible="visible" :data="editItem" @confirm="handleConfirm" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { ref, onMounted } from 'vue'
 import TabBackgroundList from './TabBackgroundList.vue'
+import TabBackgroundEdit from './TabBackgroundEdit.vue'
+import ButtonCircleFixed from 'comp/ButtonCircleFixed.vue'
+import { getRandomID } from '@/common/utils/util'
 
-const list = ref([1, 2, 3])
+const props = defineProps({
+  config: {
+    type: Object,
+    default: () => {}
+  }
+})
+
+const list = ref([])
+
+onMounted(() => {
+  list.value = props.config.background
+})
 
 // 删除卡片
 const deleteCard = (item, index) => {
@@ -32,36 +46,29 @@ const editCard = (item, index) => {
   visible.value = true
 }
 
-// // 新增
-// const handleAddCard = () => {
-//   editItem.value = null
-//   visible.value = true
-// }
+// 新增
+const handleAdd = () => {
+  editItem.value = null
+  visible.value = true
+}
 
-// // 保存卡片
-// const handleConfirmCard = (data) => {
-//   const { id } = data
-//   if (!id) {
-//     // 新增
-//     list.value.push({
-//       ...data,
-//       id: getRandomID()
-//     })
-//   } else {
-//     // 编辑
-//     editItem.value = Object.assign(editItem.value, data)
-//   }
-// }
+// 保存卡片
+const handleConfirm = (data) => {
+  console.log(data)
+  const { id } = data
+  if (id) {
+    editItem.value = Object.assign(editItem.value, data)
+  } else {
+    list.value.push({
+      ...data,
+      id: getRandomID()
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .background {
   height: 100%;
-}
-
-.fixed-button {
-  position: fixed;
-  right: 20px;
-  top: 80px;
 }
 </style>

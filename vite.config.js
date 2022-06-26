@@ -27,5 +27,8 @@ export default defineConfig({
       'pages/': `${srcPath}/pages/`,
       'sass/': `${srcPath}/common/sass/`
     }
+  },
+  server: {
+    open: true
   }
 })
