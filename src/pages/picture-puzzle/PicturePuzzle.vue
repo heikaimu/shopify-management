@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-06-21 11:09:05
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 17:09:44
+ * @LastEditTime: 2022-06-27 14:40:50
  * @FilePath: /shopify-management/src/pages/picture-puzzle/PicturePuzzle.vue
 -->
 <template>
@@ -35,60 +35,42 @@
 </template>
 
 <script setup>
-import { ref, provide } from 'vue'
+import { ref, provide, computed } from 'vue'
 import TabBackground from './tab-background/TabBackground.vue'
 import TabComposing from './tab-composing/TabComposing.vue'
 import TabSize from './tab-size/TabSize.vue'
 
 const config = ref({
-  background: [
-    {
-      id: 'dwadaw',
-      name: 'background name',
-      tag: 'test tag',
-      images: [
-        {
-          url: 'https://cdn.shopifycdn.net/s/files/1/0343/0275/4948/files/2_48f88b4b-e0f2-41b3-91c5-933da593b129.jpg?v=1654594018',
-          size: 'dwada1'
-        },
-        {
-          url: 'https://cdn.shopifycdn.net/s/files/1/0343/0275/4948/files/2_48f88b4b-e0f2-41b3-91c5-933da593b129.jpg?v=1654594018',
-          size: 'dwada2'
-        },
-        {
-          url: 'https://cdn.shopifycdn.net/s/files/1/0343/0275/4948/files/2_48f88b4b-e0f2-41b3-91c5-933da593b129.jpg?v=1654594018',
-          size: 'dwada3'
-        }
-      ]
-    }
-  ],
+  background: [],
   composing: [],
-  size: [
-    {
-      id: '121xsda',
-      name: 'blanket size 1',
-      width: 500,
-      height: 500
-    },
-    {
-      id: '121xsddaa',
-      name: 'blanket size 2',
-      width: 400,
-      height: 700
-    }
-  ]
+  size: []
 })
 
-provide('size', config.value.size)
-provide('composing', config.value.composing)
+const size = computed(() => {
+  return config.value.size
+})
+provide('size', size)
+
+const composing = computed(() => {
+  return config.value.composing
+})
+provide('composing', composing)
 
 // 导入
 const handleImport = (e) => {
   const file = e.target.files[0]
+  if (!file) {
+    return
+  }
+
   const reader = new FileReader()
   reader.readAsText(file)
   reader.onload = (e) => {
-    // const res = e.target.result
+    const data = JSON.parse(e.target.result)
+    config.value.size = data.size
+    config.value.composing = data.composing
+    config.value.size = data.size
+    config.value.background = data.background
   }
 }
 
@@ -97,8 +79,7 @@ const handleExport = () => {
   const link = document.createElement('a')
   link.download = '配置.json'
   link.style.display = 'none'
-  const json = JSON.stringify({
-  })
+  const json = JSON.stringify(config.value)
   const blob = new Blob([json])
   link.href = URL.createObjectURL(blob)
   document.body.appendChild(link)

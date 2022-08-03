@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-06-24 17:06:12
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 17:31:37
+ * @LastEditTime: 2022-06-27 09:59:11
  * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-background/TabBackground.vue
 -->
 <template>
@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watchEffect } from 'vue'
 import TabBackgroundList from './TabBackgroundList.vue'
 import TabBackgroundEdit from './TabBackgroundEdit.vue'
 import ButtonCircleFixed from 'comp/ButtonCircleFixed.vue'
@@ -28,7 +28,7 @@ const props = defineProps({
 
 const list = ref([])
 
-onMounted(() => {
+watchEffect(() => {
   list.value = props.config.background
 })
 

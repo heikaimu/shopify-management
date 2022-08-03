@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-06-21 13:50:03
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 17:27:49
+ * @LastEditTime: 2022-06-27 14:38:41
  * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-background/TabBackgroundListCard.vue
 -->
 <template>
@@ -10,8 +10,10 @@
       <img :src="cover">
     </div>
     <div style="padding: 14px">
-      <span>{{ data.name || '无标题' }}</span>
-
+      <h2 class="title">{{ data.name || '无标题' }}</h2>
+      <div class="tags">
+        <el-tag v-for="item in data.list" :key="item.size">{{ sizeLabel(item.size) }}({{ item.images.length }})</el-tag>
+      </div>
       <div class="bottom">
         <el-button text class="button" @click="handleEdit">编辑</el-button>
         <el-divider direction="vertical" />
@@ -22,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { computed, inject, ref, watchEffect } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const props = defineProps({
@@ -41,11 +43,19 @@ const emits = defineEmits({
   edit: null
 })
 
+const size = inject('size')
+const sizeLabel = computed(() => {
+  return (id) => {
+    const curSize = size.value.find(item => item.id === id)
+    return curSize ? curSize.name : id
+  }
+})
+
 const loading = ref(false)
 const cover = ref('')
 
 watchEffect(() => {
-  cover.value = props.data.images[0].url
+  cover.value = props.data.list[0].images[0].url
 })
 
 const handleDelete = () => {
@@ -94,6 +104,19 @@ const handleEdit = () => {
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+}
+
+.title {
+  font-size: 16px;
+  color: #333333;
+  margin: 0;
+}
+
+.tags {
+  padding-top: 8px;
+  &>* {
+    margin-right: 5px;
   }
 }
 

@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2022-06-27 08:57:35
+ * @LastEditors: Yaowen Liu
+ * @LastEditTime: 2022-06-27 09:52:10
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-size/TabSize.vue
+-->
 <template>
   <div class="size-table">
     <TabSizeList :list="list" @edit="editCard" @delete="deleteCard" />
@@ -10,7 +16,7 @@
 import TabSizeList from './TabSizeList.vue'
 import TabSizeEdit from './TabSizeEdit.vue'
 import ButtonCircleFixed from 'comp/ButtonCircleFixed.vue'
-import { onMounted, ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { getRandomID } from '@/common/utils/util'
 
 const props = defineProps({
@@ -22,7 +28,7 @@ const props = defineProps({
 
 const list = ref([])
 
-onMounted(() => {
+watchEffect(() => {
   list.value = props.config.size
 })
 

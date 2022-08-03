@@ -13,7 +13,7 @@ specifiers:
   eslint-plugin-promise: ^6.0.0
   eslint-plugin-vue: ^9.1.1
   fabric: 2.7.0
-  fabric-renderer: ^1.0.0
+  fabric-renderer: 1.0.1
   sass: ^1.52.3
   vite: ^2.6.4
   vite-plugin-eslint: ^1.6.1
@@ -24,7 +24,7 @@ dependencies:
   '@vueuse/core': 8.7.4_vue@3.2.37
   element-plus: 2.2.6_vue@3.2.37
   fabric: 2.7.0
-  fabric-renderer: 1.0.0
+  fabric-renderer: 1.0.1
   vue: 3.2.37
 
 devDependencies:
@@ -1197,8 +1197,8 @@ packages:
       fabric: 2.7.0
     dev: false
 
-  /fabric-renderer/1.0.0:
-    resolution: {integrity: sha512-7bg/x5Rtvb/sZaqHaN15sgJgw4lK+w3Y2yjCVAPRMJJaLBhntBiF0a1Gq6LZslF8AnBuF1LbutNNbO3QSrAnuQ==}
+  /fabric-renderer/1.0.1:
+    resolution: {integrity: sha512-UOdA02ACHf8M7NBMLbJNiz1isGarcq4eUSsolptZQiZSkso7D3t12dJP0H1qN/WtV20b+nWCUIZUTEEIqFVm/w==}
     dependencies:
       fabric: 2.7.0
       fabric-customise-controls: 2.0.6-beta

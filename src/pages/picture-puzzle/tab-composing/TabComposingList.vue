@@ -1,3 +1,9 @@
+<!--
+ * @Date: 2022-06-27 08:57:35
+ * @LastEditors: Yaowen Liu
+ * @LastEditTime: 2022-06-27 09:34:01
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-composing/TabComposingList.vue
+-->
 <template>
   <el-scrollbar height="100%">
     <transition-group name="list-complete" tag="ul" class="composing__list">
@@ -19,7 +25,8 @@ defineProps({
 })
 
 const emits = defineEmits({
-  edit: null
+  edit: null,
+  delete: null
 })
 
 const handleEdit = (item, index) => {

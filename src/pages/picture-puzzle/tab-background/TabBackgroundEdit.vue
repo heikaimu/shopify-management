@@ -1,8 +1,8 @@
 <!--
  * @Date: 2022-06-21 14:47:46
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 15:02:48
- * @FilePath: /shopify-management/src/components/PicturePuzzleEdit.vue
+ * @LastEditTime: 2022-07-06 13:36:27
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-background/TabBackgroundEdit.vue
 -->
 <template>
   <el-drawer v-model="isVisible" title="背景配置" :size="1000" @opened="opened">
@@ -25,23 +25,56 @@
         </el-row>
         <el-divider content-position="left">图片列表</el-divider>
 
-        <el-form-item label="图片列表" prop="images" />
-        <el-card v-for="(item, index) in form.images" :key="index" class="box-card" shadow="hover">
+        <el-form-item label="图片列表" prop="list" />
+        <el-card v-for="(item, index) in form.list" :key="index" class="box-card" shadow="hover">
           <template #header>
             <div class="box-card__header">
-              <span>尺寸#{{ index+1 }}</span>
+              <span>组#{{ index+1 }}</span>
               <el-button type="danger" @click="handleDelete(index)">删除</el-button>
             </div>
           </template>
           <el-row :span="24" :gutter="20">
-            <el-col :span="18">
-              <el-form-item label="图片地址" :prop="`images[${index}].url`" :rules="rules.url">
-                <el-input v-model="item.url" />
+            <el-col :span="24">
+              <el-form-item label="尺寸" :prop="`list[${index}].size`" :rules="rules.size">
+                <SelectorSize v-model:value="item.size" style="width:100%" />
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item label="尺寸" :prop="`images[${index}].size`" :rules="rules.url">
-                <SelectorSize v-model:value="item.size" />
+            <el-col :span="24">
+              <CheckboxComposing v-model:value="item.composing" :image-size="item.size" />
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="图片集合" :prop="`list[${index}].images`" :rules="rules.images">
+                <el-row v-for="(image,imageIndex) in item.images" :key="imageIndex" style="width:100%; margin-bottom: 20px;" :gutter="20">
+                  <el-col :span="24">
+                    <el-divider>{{ `图片#${imageIndex+1}` }}</el-divider>
+                  </el-col>
+                  <el-col :span="16">
+                    <el-form-item label="预览用图" :prop="`list[${index}].images[${imageIndex}].url`" :rules="rules.url">
+                      <el-input v-model="image.url" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="图片颜色" :prop="`list[${index}].images[${imageIndex}].color`" :rules="rules.color">
+                      <el-input v-model="image.color" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="16">
+                    <el-form-item label="生产用图" :prop="`list[${index}].images[${imageIndex}].productionURL`" :rules="rules.productionURL">
+                      <el-input v-model="image.productionURL" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="生产宽度" :prop="`list[${index}].images[${imageIndex}].productionURLWidth`" :rules="rules.productionURLWidth">
+                      <el-input-number v-model="image.productionURLWidth" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="1">
+                    <el-form-item label="-">
+                      <el-button type="danger">删除</el-button>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-button type="primary" :icon="Plus" link @click="handleAddImage(item.images)">添加图片</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -60,6 +93,7 @@
 import { ref, toRaw } from 'vue'
 // import { ElMessage, ElMessageBox } from 'element-plus'\
 import SelectorSize from 'comp/SelectorSize.vue'
+import CheckboxComposing from 'comp/CheckboxComposing.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useVModel } from '@vueuse/core'
 
@@ -86,7 +120,7 @@ const formEl = ref(null)
 const form = ref({
   name: '',
   tag: '',
-  images: []
+  list: []
 })
 
 const rules = ref({
@@ -96,15 +130,32 @@ const rules = ref({
   tag: [
     { required: true, message: '不能为空', trigger: 'blur' }
   ],
+  list: [
+    {
+      type: 'array',
+      required: true,
+      message: '至少有一组数据',
+      trigger: 'change'
+    }
+  ],
   images: [
     {
       type: 'array',
       required: true,
-      message: '至少有一张图片',
+      message: '至少有一组数据',
       trigger: 'change'
     }
   ],
   url: [
+    { required: true, message: '不能为空', trigger: 'blur' }
+  ],
+  color: [
+    { required: true, message: '不能为空', trigger: 'blur' }
+  ],
+  productionURL: [
+    { required: true, message: '不能为空', trigger: 'blur' }
+  ],
+  productionURLWidth: [
     { required: true, message: '不能为空', trigger: 'blur' }
   ],
   size: [
@@ -120,15 +171,26 @@ const opened = () => {
 
 // 添加
 const handleAdd = () => {
-  form.value.images.push({
+  form.value.list.push({
+    images: [],
+    size: '',
+    composing: []
+  })
+}
+
+// 添加图片
+const handleAddImage = (list) => {
+  list.push({
     url: '',
-    size: ''
+    color: '',
+    productionURL: '',
+    productionURLWidth: 0
   })
 }
 
 // 删除
 const handleDelete = (index) => {
-  form.value.images.splice(index, 1)
+  form.value.list.splice(index, 1)
 }
 
 // 确定

@@ -1,23 +1,36 @@
 <!--
  * @Date: 2022-06-21 11:09:05
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 15:19:08
- * @FilePath: /shopify-management/src/components/TabComposing.vue
+ * @LastEditTime: 2022-06-27 09:53:01
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-composing/TabComposing.vue
 -->
 <template>
-  <TabComposingList :list="list" @edit="editCard" @delete="deleteCard" />
-  <ButtonCircleFixed @click="handleAdd" />
-  <TabComposingEdit v-if="visible" v-model:visible="visible" :data="editItem" @confirm="handleConfirmCard" />
+  <div class="composing">
+    <TabComposingList :list="list" @edit="editCard" @delete="deleteCard" />
+    <ButtonCircleFixed @click="handleAdd" />
+    <TabComposingEdit v-if="visible" v-model:visible="visible" :data="editItem" @confirm="handleConfirmCard" />
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import TabComposingList from './TabComposingList.vue'
 import TabComposingEdit from './TabComposingEdit.vue'
 import ButtonCircleFixed from 'comp/ButtonCircleFixed.vue'
 import { getRandomID } from '@/common/utils/util'
 
+const props = defineProps({
+  config: {
+    type: Object,
+    default: () => {}
+  }
+})
+
 const list = ref([])
+
+watchEffect(() => {
+  list.value = props.config.composing
+})
 
 // 删除卡片
 const deleteCard = (item, index) => {
@@ -57,40 +70,7 @@ const handleConfirmCard = (data) => {
 
 <style lang="scss" scoped>
 @import "sass/variables";
-
-.picture-puzzle {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  &__header {
-    flex: none;
-    padding: 0 20px;
-    border-bottom: 1px solid $color-grey-light-2;
-    box-shadow: 0 0 14px $color-grey-light-1;
-  }
-
-  &__content {
-    flex: 1;
-    overflow: hidden;
-    background-color: $color-grey-light-1;
-  }
-
-  &__footer {
-    flex: none;
-    padding: 10px 20px;
-    border-top: 1px solid $color-grey-light-2;
-    box-shadow: 0 0 14px $color-grey-light-1;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &__heading {
-    font-size: 20px;
-    color: $color-black;
-  }
-
+.composing {
+  height: 100%;
 }
 </style>

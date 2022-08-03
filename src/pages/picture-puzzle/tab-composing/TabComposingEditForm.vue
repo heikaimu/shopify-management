@@ -1,8 +1,8 @@
 <!--
  * @Date: 2022-06-22 14:26:59
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 11:29:07
- * @FilePath: /shopify-management/src/components/PicturePuzzleForm.vue
+ * @LastEditTime: 2022-07-06 15:34:07
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-composing/TabComposingEditForm.vue
 -->
 <template>
   <div class="custom-form">
@@ -83,6 +83,10 @@
         </el-radio>
       </el-radio-group>
     </div>
+    <div class="custom-form__item">
+      <el-divider content-position="left">操作</el-divider>
+      <el-button type="danger" @click="handleDelete">删除图层</el-button>
+    </div>
     <!-- <div class="custom-form__item">
       <el-divider content-position="left">Y 中轴</el-divider>
       <el-radio-group v-model="form.originY" class="ml-4" @change="handleChangeForm">
@@ -124,8 +128,9 @@ const props = defineProps({
 
 const emits = defineEmits({
   order: null,
-  changeForm: null,
-  rotate: null
+  change: null,
+  rotate: null,
+  delete: null
 })
 
 const form = ref({
@@ -152,7 +157,7 @@ const handleOrder = (action) => {
 
 const handleChangeForm = () => {
   nextTick(() => {
-    emits('changeForm', form.value)
+    emits('change', form.value)
   })
 }
 
@@ -160,6 +165,10 @@ const handleRotate = () => {
   nextTick(() => {
     emits('rotate', form.value.angle)
   })
+}
+
+const handleDelete = () => {
+  emits('delete')
 }
 </script>
 

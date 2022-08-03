@@ -1,8 +1,8 @@
 <!--
  * @Date: 2022-06-21 14:47:46
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 15:02:48
- * @FilePath: /shopify-management/src/components/PicturePuzzleEdit.vue
+ * @LastEditTime: 2022-07-06 15:37:31
+ * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-composing/TabComposingEdit.vue
 -->
 <template>
   <el-drawer v-model="isVisible" title="插件配置" :size="1000" @opened="opened">
@@ -18,26 +18,26 @@
                   <el-input v-model="form.name" />
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <!-- <el-col :span="12">
                 <el-form-item label="标签" prop="tag">
                   <el-input v-model="form.tag" />
                 </el-form-item>
-              </el-col>
-              <el-col :span="10">
+              </el-col> -->
+              <el-col :span="12">
                 <el-form-item label="尺寸" prop="size">
-                  <SelectorSize v-model:value="form.size" @change="handleChangeSize" />
+                  <SelectorSize v-model:value="form.size" style="width:100%" @change="handleChangeSize" />
                 </el-form-item>
               </el-col>
-              <el-col :span="7">
+              <!-- <el-col v-show="form.size" :span="7">
                 <el-form-item label="宽度" prop="width">
                   <el-input v-model="form.width" disabled />
                 </el-form-item>
               </el-col>
-              <el-col :span="7">
+              <el-col v-show="form.size" :span="7">
                 <el-form-item label="高度" prop="height">
                   <el-input v-model="form.height" disabled />
                 </el-form-item>
-              </el-col>
+              </el-col> -->
             </el-row>
           </el-form>
 
@@ -50,7 +50,7 @@
         <div class="custom-board__right">
           <TabComposingEditForm
             v-if="hasActiveObject" :data="objForm" :has-active-object="hasActiveObject"
-            @order="handleOrder" @changeForm="handleChangeForm" @rotate="handleChangeAngle" />
+            @order="handleOrder" @change="handleChangeForm" @rotate="handleChangeAngle" @delete="handleDeleteObject" />
           <p v-else class="custom-board__empty-text">请选选择一个图层</p>
         </div>
       </div>
@@ -78,7 +78,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { useVModel } from '@vueuse/core'
 import Renderer from 'fabric-renderer'
-import { WIDTH, HEIGHT } from '@/config'
 // import { auxiliaryLine } from '@/common/utils/auxiliaryLine'
 
 function useRenderer (props) {
@@ -87,12 +86,13 @@ function useRenderer (props) {
   const renderer = shallowRef({})
   const objForm = ref({})
   const formEl = ref(null)
+  const backgroundColor = '#666666'
   const form = ref({
     name: '',
     tag: '',
     size: '',
-    width: WIDTH,
-    height: HEIGHT
+    width: 0,
+    height: 0
   })
 
   const rules = ref({
@@ -121,7 +121,7 @@ function useRenderer (props) {
       height: form.value.height,
       scale: 1,
       configurable: true,
-      backgroundColor: '#f2f2f2'
+      backgroundColor
     })
 
     if (props.data) {
@@ -135,7 +135,6 @@ function useRenderer (props) {
   // 回填
   const fullbackJson = () => {
     if (props.data) {
-      console.log(props.data)
       const { id, name, tag, size, width, height } = props.data
       form.value.id = id
       form.value.name = name
@@ -172,11 +171,16 @@ function useRenderer (props) {
           objForm.value.text = activeObject.value.get('text')
         }
       } else {
-        hasActiveObject.value = false
-        activeObject.value = {}
-        objForm.value = {}
+        clearObject()
       }
     })
+  }
+
+  // 清空
+  const clearObject = () => {
+    hasActiveObject.value = false
+    activeObject.value = {}
+    objForm.value = {}
   }
 
   // 移动
@@ -236,7 +240,8 @@ function useRenderer (props) {
     formEl,
     rules,
     objForm,
-    opened
+    opened,
+    clearObject
   }
 }
 
@@ -259,7 +264,7 @@ const emits = defineEmits({
 
 const isVisible = useVModel(props, 'visible', emits)
 
-const { renderer, hasActiveObject, activeObject, formEl, form, rules, objForm, opened } = useRenderer(props)
+const { renderer, hasActiveObject, activeObject, formEl, form, rules, objForm, opened, clearObject } = useRenderer(props)
 
 // 排序
 const handleOrder = (action) => {
@@ -298,6 +303,16 @@ const handleChangeAngle = (angle) => {
 
   activeObject.value.rotate(angle)
   renderer.value.instance.renderAll()
+}
+
+// 删除图层
+const handleDeleteObject = () => {
+  if (!activeObject.value) {
+    return
+  }
+
+  renderer.value.instance.remove(activeObject.value)
+  clearObject()
 }
 
 // 添加背景

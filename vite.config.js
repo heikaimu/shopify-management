@@ -1,7 +1,7 @@
 /*
  * @Date: 2022-06-21 10:57:35
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-24 17:10:58
+ * @LastEditTime: 2022-07-06 15:30:48
  * @FilePath: /shopify-management/vite.config.js
  */
 import { defineConfig } from 'vite'
@@ -29,6 +29,7 @@ export default defineConfig({
     }
   },
   server: {
-    open: true
+    open: true,
+    port: 3003
   }
 })
