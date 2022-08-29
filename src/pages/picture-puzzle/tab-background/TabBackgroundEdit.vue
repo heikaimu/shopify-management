@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-06-21 14:47:46
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-07-06 13:36:27
+ * @LastEditTime: 2022-08-29 13:57:53
  * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-background/TabBackgroundEdit.vue
 -->
 <template>
@@ -58,11 +58,11 @@
                       <el-input v-model="image.color" />
                     </el-form-item>
                   </el-col>
-                  <el-col :span="16">
+                  <!-- <el-col :span="16">
                     <el-form-item label="生产用图" :prop="`list[${index}].images[${imageIndex}].productionURL`" :rules="rules.productionURL">
                       <el-input v-model="image.productionURL" />
                     </el-form-item>
-                  </el-col>
+                  </el-col> -->
                   <el-col :span="6">
                     <el-form-item label="生产宽度" :prop="`list[${index}].images[${imageIndex}].productionURLWidth`" :rules="rules.productionURLWidth">
                       <el-input-number v-model="image.productionURLWidth" />
@@ -96,6 +96,7 @@ import SelectorSize from 'comp/SelectorSize.vue'
 import CheckboxComposing from 'comp/CheckboxComposing.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useVModel } from '@vueuse/core'
+import { getRandomID } from '../../../common/utils/util'
 
 // 这是分割线，主体业务
 const props = defineProps({
@@ -152,9 +153,9 @@ const rules = ref({
   color: [
     { required: true, message: '不能为空', trigger: 'blur' }
   ],
-  productionURL: [
-    { required: true, message: '不能为空', trigger: 'blur' }
-  ],
+  // productionURL: [
+  //   { required: true, message: '不能为空', trigger: 'blur' }
+  // ],
   productionURLWidth: [
     { required: true, message: '不能为空', trigger: 'blur' }
   ],
@@ -181,9 +182,10 @@ const handleAdd = () => {
 // 添加图片
 const handleAddImage = (list) => {
   list.push({
+    id: getRandomID(),
     url: '',
     color: '',
-    productionURL: '',
+    // productionURL: '',
     productionURLWidth: 0
   })
 }
