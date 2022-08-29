@@ -18,6 +18,7 @@ specifiers:
   vite: ^2.6.4
   vite-plugin-eslint: ^1.6.1
   vue: ^3.2.16
+  vue-router: '4'
 
 dependencies:
   '@element-plus/icons-vue': 2.0.6_vue@3.2.37
@@ -26,6 +27,7 @@ dependencies:
   fabric: 2.7.0
   fabric-renderer: 1.0.1
   vue: 3.2.37
+  vue-router: 4.1.3_vue@3.2.37
 
 devDependencies:
   '@babel/eslint-parser': 7.18.2_eslint@8.18.0
@@ -202,6 +204,10 @@ packages:
     dependencies:
       '@vue/compiler-dom': 3.2.37
       '@vue/shared': 3.2.37
+    dev: false
+
+  /@vue/devtools-api/6.2.1:
+    resolution: {integrity: sha512-OEgAMeQXvCoJ+1x8WyQuVZzFo0wcyCmUR3baRVLmKBo1LmYZWMlRiXlux5jd0fqVJu6PfDbOrZItVqUEzLobeQ==}
     dev: false
 
   /@vue/reactivity-transform/3.2.37:
@@ -2356,6 +2362,15 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-router/4.1.3_vue@3.2.37:
+    resolution: {integrity: sha512-XvK81bcYglKiayT7/vYAg/f36ExPC4t90R/HIpzrZ5x+17BOWptXLCrEPufGgZeuq68ww4ekSIMBZY1qdUdfjA==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@vue/devtools-api': 6.2.1
+      vue: 3.2.37
+    dev: false
 
   /vue/3.2.37:
     resolution: {integrity: sha512-bOKEZxrm8Eh+fveCqS1/NkG/n6aMidsI6hahas7pa0w/l7jkbssJVsRhVDs07IdDq7h9KHswZOgItnwJAgtVtQ==}

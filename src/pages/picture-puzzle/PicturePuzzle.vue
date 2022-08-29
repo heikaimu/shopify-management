@@ -1,14 +1,11 @@
 <!--
  * @Date: 2022-06-21 11:09:05
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-06-27 14:40:50
+ * @LastEditTime: 2022-08-18 14:18:11
  * @FilePath: /shopify-management/src/pages/picture-puzzle/PicturePuzzle.vue
 -->
 <template>
   <div class="picture-puzzle">
-    <div class="picture-puzzle__header">
-      <h2 class="picture-puzzle__heading">Plugin Config</h2>
-    </div>
     <div class="picture-puzzle__content">
       <el-tabs tab-position="left" class="tab-wrapper">
         <el-tab-pane label="背景" class="tab-pane">
@@ -93,37 +90,23 @@ const handleExport = () => {
 @import "sass/variables";
 
 .picture-puzzle {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  &__header {
-    flex: none;
-    padding: 0 20px;
-    border-bottom: 1px solid $color-grey-light-2;
-    box-shadow: 0 0 14px $color-grey-light-1;
-  }
+  height: calc(100% - 55px);
+  overflow-y: auto;
 
   &__content {
-    flex: 1;
-    overflow: hidden;
-    background-color: $color-grey-light-1;
   }
 
   &__footer {
-    flex: none;
     padding: 10px 20px;
     border-top: 1px solid $color-grey-light-2;
     box-shadow: 0 0 14px $color-grey-light-1;
+    background-color: $color-white;
     display: flex;
     justify-content: space-between;
-  }
-
-  &__heading {
-    font-size: 20px;
-    color: $color-black;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
   &__list {
