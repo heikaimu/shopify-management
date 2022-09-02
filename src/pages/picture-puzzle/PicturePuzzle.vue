@@ -1,16 +1,16 @@
 <!--
  * @Date: 2022-06-21 11:09:05
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-08-30 16:57:53
+ * @LastEditTime: 2022-09-02 17:44:25
  * @FilePath: /shopify-management/src/pages/picture-puzzle/PicturePuzzle.vue
 -->
 <template>
   <div class="picture-puzzle">
     <div class="picture-puzzle__content">
       <el-tabs tab-position="left" class="tab-wrapper">
-        <el-tab-pane label="产品" class="tab-pane">
+        <!-- <el-tab-pane label="产品" class="tab-pane">
           <TabProduct :config="config" />
-        </el-tab-pane>
+        </el-tab-pane> -->
         <el-tab-pane label="背景" class="tab-pane">
           <TabBackground :config="config" />
         </el-tab-pane>
@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref, provide, computed } from 'vue'
-import TabProduct from './tab-product/TabProduct.vue'
+// import TabProduct from './tab-product/TabProduct.vue'
 import TabBackground from './tab-background/TabBackground.vue'
 import TabComposing from './tab-composing/TabComposing.vue'
 import TabSize from './tab-size/TabSize.vue'

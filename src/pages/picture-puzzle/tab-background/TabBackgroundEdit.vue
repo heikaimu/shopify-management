@@ -1,7 +1,7 @@
 <!--
  * @Date: 2022-06-21 14:47:46
  * @LastEditors: Yaowen Liu
- * @LastEditTime: 2022-08-29 13:57:53
+ * @LastEditTime: 2022-09-02 17:41:29
  * @FilePath: /shopify-management/src/pages/picture-puzzle/tab-background/TabBackgroundEdit.vue
 -->
 <template>
@@ -55,7 +55,8 @@
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="图片颜色">
-                      <el-input v-model="image.color" />
+                      <!-- <el-input v-model="image.color" /> -->
+                      <el-color-picker v-model="image.color" />
                     </el-form-item>
                   </el-col>
                   <!-- <el-col :span="16">
@@ -70,7 +71,7 @@
                   </el-col> -->
                   <el-col :span="2">
                     <el-form-item label="操作">
-                      <el-button type="danger">删除</el-button>
+                      <el-button type="danger" @click="handleRemove(item, imageIndex)">删除</el-button>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -208,6 +209,9 @@ const handleConfirm = async () => {
   })
 }
 
+function handleRemove (item, index) {
+  item.images.splice(index, 1)
+}
 </script>
 
 <style lang="scss" scoped>
