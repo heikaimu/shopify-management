@@ -6,8 +6,8 @@
 -->
 <template>
   <el-card :body-style="{ padding: '0px' }">
-    <div v-loading="loading" class="image">
-      <img :src="cover">
+    <div v-loading="loading" class="image" :style="cardStyle">
+      <img v-if="cover" :src="cover">
     </div>
     <div style="padding: 14px">
       <h2 class="title">{{ data.name || '无标题' }}</h2>
@@ -56,6 +56,12 @@ const cover = ref('')
 
 watchEffect(() => {
   cover.value = props.data.list[0].images[0].url
+})
+
+const cardStyle = computed(() => {
+  return {
+    backgroundColor: props.data.list[0].images[0].color
+  }
 })
 
 const handleDelete = () => {
@@ -115,6 +121,7 @@ const handleEdit = () => {
 
 .tags {
   padding-top: 8px;
+
   &>* {
     margin-right: 5px;
   }

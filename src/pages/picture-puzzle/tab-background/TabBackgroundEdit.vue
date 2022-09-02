@@ -49,12 +49,12 @@
                     <el-divider>{{ `图片#${imageIndex+1}` }}</el-divider>
                   </el-col>
                   <el-col :span="16">
-                    <el-form-item label="预览用图" :prop="`list[${index}].images[${imageIndex}].url`" :rules="rules.url">
+                    <el-form-item label="预览用图">
                       <el-input v-model="image.url" />
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="图片颜色" :prop="`list[${index}].images[${imageIndex}].color`" :rules="rules.color">
+                  <el-col :span="6">
+                    <el-form-item label="图片颜色">
                       <el-input v-model="image.color" />
                     </el-form-item>
                   </el-col>
@@ -63,13 +63,13 @@
                       <el-input v-model="image.productionURL" />
                     </el-form-item>
                   </el-col> -->
-                  <el-col :span="6">
+                  <!-- <el-col :span="6">
                     <el-form-item label="生产宽度" :prop="`list[${index}].images[${imageIndex}].productionURLWidth`" :rules="rules.productionURLWidth">
                       <el-input-number v-model="image.productionURLWidth" />
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="1">
-                    <el-form-item label="-">
+                  </el-col> -->
+                  <el-col :span="2">
+                    <el-form-item label="操作">
                       <el-button type="danger">删除</el-button>
                     </el-form-item>
                   </el-col>

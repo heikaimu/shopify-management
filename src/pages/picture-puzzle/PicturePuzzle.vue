@@ -42,6 +42,7 @@ import TabComposing from './tab-composing/TabComposing.vue'
 import TabSize from './tab-size/TabSize.vue'
 
 const config = ref({
+  product: [],
   background: [],
   composing: [],
   size: []
