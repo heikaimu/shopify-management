@@ -5,26 +5,41 @@
  * @FilePath: /shopify-management/src/pages/area-config/AreaConfigEdit.vue
 -->
 <template>
-  <el-drawer v-model="isVisible" title="尺寸配置" :size="500" @opened="opened">
+  <el-drawer v-model="isVisible" :title="title" :size="500" @opened="opened">
     <template #default>
       <el-form
         ref="formEl" status-icon :model="form" :rules="rules" label-position="top"
         label-width="100px">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" />
+        <el-form-item label="名称" prop="area">
+          <el-input v-model="form.area" />
         </el-form-item>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="宽度" prop="width">
-              <el-input-number v-model="form.width" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="高度" prop="height">
-              <el-input-number v-model="form.height" />
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item label="时间范围">
+          <el-row v-for="(item, index) in form.date" :key="index" :gutter="20">
+            <el-col :span="10">
+              <el-form-item label="物流类型" :prop="`date[${index}].label`" :rules="rules.label">
+                <el-input v-model="item.label" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="最小天数" :prop="`date[${index}].min`" :rules="rules.min">
+                <el-input v-model="item.min" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="最大天数" :prop="`date[${index}].max`" :rules="rules.max">
+                <el-input v-model="item.max" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="操作">
+                <el-button type="danger" @click="handleRemove()">删除</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleAddDate">添加日期</el-button>
+        </el-form-item>
       </el-form>
     </template>
 
@@ -35,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, toRaw } from 'vue'
+import { computed, ref, toRaw } from 'vue'
 // import { ElMessage, ElMessageBox } from 'element-plus'
 import { useVModel } from '@vueuse/core'
 
@@ -59,20 +74,30 @@ const isVisible = useVModel(props, 'visible', emits)
 
 const formEl = ref(null)
 const form = ref({
-  area: '中华人民共和国',
-  date1: '2016-05-03',
-  date2: '2016-05-03'
+  area: '',
+  date: []
 })
 const actionType = ref('add')
+
+const title = computed(() => {
+  const map = {
+    add: '新增国家',
+    edit: '编辑国家'
+  }
+  return map[actionType.value]
+})
 
 const rules = ref({
   name: [
     { required: true, message: '不能为空', trigger: 'blur' }
   ],
-  width: [
+  label: [
     { required: true, message: '不能为空', trigger: 'blur' }
   ],
-  height: [
+  min: [
+    { required: true, message: '不能为空', trigger: 'blur' }
+  ],
+  max: [
     { required: true, message: '不能为空', trigger: 'blur' }
   ]
 })
@@ -80,14 +105,14 @@ const rules = ref({
 const opened = () => {
   if (props.data) {
     form.value = { ...toRaw(props.data) }
-    actionType.value = 'add'
+    actionType.value = 'edit'
   } else {
     form.value = {
-      name: '',
-      width: 500,
-      height: 600
+      area: '',
+      date: []
     }
-    actionType.value = 'edit'
+
+    actionType.value = 'add'
   }
 }
 
@@ -104,7 +129,18 @@ const handleConfirm = async () => {
   })
 }
 
+const handleAddDate = () => {
+  form.value.date.push({
+    label: '普通',
+    min: 3,
+    max: 5
+  })
+}
+
 </script>
 
 <style lang="scss" scoped>
+.mt-10 {
+  margin-top: 10px;
+}
 </style>

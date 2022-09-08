@@ -7,17 +7,24 @@
 <template>
   <div class="area-config">
     <div class="area-config__content">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%">
         <el-table-column prop="area" label="地区" />
-        <el-table-column prop="date1" label="发货时间" />
-        <el-table-column prop="date2" label="到达时间" />
-        <el-table-column fixed="right" label="Operations" width="120">
-          <template #default>
-            <el-button link type="primary" size="small" @click="handleEdit">Edit</el-button>
+        <el-table-column label="时间范围">
+          <template #default="scope">
+            <span v-for="(item, index) in scope.row.date" :key="index">
+              {{ item.label }}:
+              <b>{{ item.min }}-{{ item.max }}天</b>
+              <el-divider direction="vertical" />
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="100">
+          <template #default="scope">
+            <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <ButtonCircleFixed @click="handleAdd" @confirm="handleConfirm" />
+      <ButtonCircleFixed @click="handleAdd" />
     </div>
     <div class="area-config__footer">
       <div class="footer__left">
@@ -29,32 +36,75 @@
       </div>
     </div>
 
-    <AreaConfigEdit v-model:visible="editVisible" :data="editData" />
+    <AreaConfigEdit v-model:visible="editVisible" :data="editData" @confirm="handleConfirm" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import AreaConfigEdit from './AreaConfigEdit.vue'
 import ButtonCircleFixed from 'comp/ButtonCircleFixed.vue'
-
-const config = ref({})
 
 const tableData = ref([
   {
     area: '中华人民共和国',
-    date1: '2016-05-03',
-    date2: '2016-05-03'
+    date: [
+      {
+        label: '普通',
+        min: 3,
+        max: 5
+      },
+      {
+        label: '正常',
+        min: 2,
+        max: 6
+      },
+      {
+        label: '特快',
+        min: 2,
+        max: 6
+      }
+    ]
   },
   {
     area: '日本',
-    date1: '2016-05-03',
-    date2: '2016-05-03'
+    date: [
+      {
+        label: '普通',
+        min: 3,
+        max: 5
+      },
+      {
+        label: '正常',
+        min: 2,
+        max: 6
+      },
+      {
+        label: '特快',
+        min: 2,
+        max: 6
+      }
+    ]
   },
   {
-    area: '韩国',
-    date1: '2016-05-03',
-    date2: '2016-05-03'
+    area: '美国',
+    date: [
+      {
+        label: '普通',
+        min: 3,
+        max: 5
+      },
+      {
+        label: '正常',
+        min: 2,
+        max: 6
+      },
+      {
+        label: '特快',
+        min: 2,
+        max: 6
+      }
+    ]
   }
 ])
 
@@ -75,7 +125,12 @@ function handleEdit (item) {
 
 // 保存编辑
 function handleConfirm (data, type) {
-  console.log(data, type)
+  if (type === 'add') {
+    tableData.value.push(data)
+  } else {
+    editData.value.name = data.name
+    editData.value.date = JSON.parse(JSON.stringify(data.date))
+  }
 }
 
 // 导入
@@ -89,29 +144,54 @@ const handleImport = (e) => {
   reader.readAsText(file)
   reader.onload = (e) => {
     const data = JSON.parse(e.target.result)
-    config.value.size = data.size
-    config.value.composing = data.composing
-    config.value.size = data.size
-    config.value.background = data.background
+    tableData.value = data
   }
 }
 
 // 导出
 const handleExport = () => {
   const link = document.createElement('a')
-  link.download = '配置.json'
+  link.download = '地区配置.json'
   link.style.display = 'none'
-  const json = JSON.stringify(config.value)
+  const json = JSON.stringify(tableData.value)
   const blob = new Blob([json])
   link.href = URL.createObjectURL(blob)
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
 }
+
+const tag = 'ptime-2-5'
+const country = '日本'
+function getDateInfo () {
+  const list = toRaw(tableData.value)
+  const curCountry = list.find(item => item.area === country)
+  const timeReg = /ptime-(\d)-(\d)/
+  const timeRes = tag.match(timeReg)
+  if (timeRes) {
+    const finalData = {
+      area: curCountry.area,
+      date: curCountry.date.map(item => {
+        const { min, max, label } = item
+        return {
+          label,
+          // eslint-disable-next-line no-undef
+          start: dayjs(dayjs().add(Number(min) + Number(timeRes[1]), 'day')).format('DD/MM/YYYY'),
+          // eslint-disable-next-line no-undef
+          end: dayjs(dayjs().add(Number(max) + Number(timeRes[2]), 'day')).format('DD/MM/YYYY')
+        }
+      })
+    }
+    console.log(finalData)
+  }
+}
+
+getDateInfo()
 </script>
 
 <style lang="scss" scoped>
 @import "sass/variables";
+
 .area-config {
   height: calc(100% - 55px);
   overflow-y: auto;

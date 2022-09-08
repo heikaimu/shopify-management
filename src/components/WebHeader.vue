@@ -26,7 +26,7 @@ import { useRoute } from 'vue-router'
 
 const activeIndex = ref('')
 const handleSelect = (key, keyPath) => {
-  console.log(key, keyPath)
+  // console.log(key, keyPath)
 }
 
 const route = useRoute()
