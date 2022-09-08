@@ -7,7 +7,7 @@
 <template>
   <div class="area-config">
     <div class="area-config__content">
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="config.country" border style="width: 100%">
         <el-table-column prop="area" label="地区" />
         <el-table-column label="时间范围">
           <template #default="scope">
@@ -45,68 +45,70 @@ import { ref, toRaw } from 'vue'
 import AreaConfigEdit from './AreaConfigEdit.vue'
 import ButtonCircleFixed from 'comp/ButtonCircleFixed.vue'
 
-const tableData = ref([
-  {
-    area: '中华人民共和国',
-    date: [
-      {
-        label: '普通',
-        min: 3,
-        max: 5
-      },
-      {
-        label: '正常',
-        min: 2,
-        max: 6
-      },
-      {
-        label: '特快',
-        min: 2,
-        max: 6
-      }
-    ]
-  },
-  {
-    area: '日本',
-    date: [
-      {
-        label: '普通',
-        min: 3,
-        max: 5
-      },
-      {
-        label: '正常',
-        min: 2,
-        max: 6
-      },
-      {
-        label: '特快',
-        min: 2,
-        max: 6
-      }
-    ]
-  },
-  {
-    area: '美国',
-    date: [
-      {
-        label: '普通',
-        min: 3,
-        max: 5
-      },
-      {
-        label: '正常',
-        min: 2,
-        max: 6
-      },
-      {
-        label: '特快',
-        min: 2,
-        max: 6
-      }
-    ]
-  }
-])
+const config = ref({
+  country: [
+    {
+      area: '中华人民共和国',
+      date: [
+        {
+          label: '普通',
+          min: 3,
+          max: 5
+        },
+        {
+          label: '正常',
+          min: 2,
+          max: 6
+        },
+        {
+          label: '特快',
+          min: 2,
+          max: 6
+        }
+      ]
+    },
+    {
+      area: '日本',
+      date: [
+        {
+          label: '普通',
+          min: 3,
+          max: 5
+        },
+        {
+          label: '正常',
+          min: 2,
+          max: 6
+        },
+        {
+          label: '特快',
+          min: 2,
+          max: 6
+        }
+      ]
+    },
+    {
+      area: '美国',
+      date: [
+        {
+          label: '普通',
+          min: 3,
+          max: 5
+        },
+        {
+          label: '正常',
+          min: 2,
+          max: 6
+        },
+        {
+          label: '特快',
+          min: 2,
+          max: 6
+        }
+      ]
+    }
+  ]
+})
 
 const editVisible = ref(false)
 const editData = ref(null)
@@ -126,7 +128,7 @@ function handleEdit (item) {
 // 保存编辑
 function handleConfirm (data, type) {
   if (type === 'add') {
-    tableData.value.push(data)
+    config.value.country.push(data)
   } else {
     editData.value.name = data.name
     editData.value.date = JSON.parse(JSON.stringify(data.date))
@@ -144,7 +146,7 @@ const handleImport = (e) => {
   reader.readAsText(file)
   reader.onload = (e) => {
     const data = JSON.parse(e.target.result)
-    tableData.value = data
+    config.value = data
   }
 }
 
@@ -153,7 +155,7 @@ const handleExport = () => {
   const link = document.createElement('a')
   link.download = '地区配置.json'
   link.style.display = 'none'
-  const json = JSON.stringify(tableData.value)
+  const json = JSON.stringify(config.value)
   const blob = new Blob([json])
   link.href = URL.createObjectURL(blob)
   document.body.appendChild(link)
@@ -164,7 +166,7 @@ const handleExport = () => {
 const tag = 'ptime-2-5'
 const country = '日本'
 function getDateInfo () {
-  const list = toRaw(tableData.value)
+  const list = toRaw(config.value.country)
   const curCountry = list.find(item => item.area === country)
   const timeReg = /ptime-(\d)-(\d)/
   const timeRes = tag.match(timeReg)
