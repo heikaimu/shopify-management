@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body {
+      background-color: #f2f2f2;
+    }
+
+    .pd-shipping-con {
+      padding: 8px 16px;
+      border-radius: 8px;
+      background-color: #ffffff;
+    }
+
+    .pd-box-header {}
+
+    .pd-box-header h2 {
+      font-size: 16px;
+      line-height: 24px;
+      padding: 12px 0;
+      margin: 0;
+    }
+
+    .pd-box-body {}
+
+    .pd-box-select {
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .pd-box-select .b2-icon {
+      fill: #11111170;
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pd-box-select .b2-icon svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .pd-shipping-select {
+      width: 100%;
+      font-size: 16px;
+      line-height: 24px;
+      padding: 12px 44px 12px 16px;
+      background-color: #1111110a;
+      border-radius: 8px;
+      margin: 0;
+      border: none;
+      appearance: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pd-box-table {
+      width: 100%;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(17, 17, 17, .08);
+      border-bottom: none;
+      border-radius: 4px;
+    }
+
+    .pd-box-table .table-row {
+      width: 100%;
+      border-bottom: 1px solid rgba(17, 17, 17, .08);
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+    }
+
+    .pd-box-table .table-row span {
+      padding: 12px 16px;
+      font-size: 12px;
+      line-height: 18px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pd-box-table .table-row .table-left {
+      width: 32%;
+    }
+
+    .pd-box-table .table-row .table-right {
+      flex-direction: column;
+      flex: 1;
+      border-left: 1px solid rgba(17, 17, 17, .08);
+    }
+
+    .pd-box-table .table-row .table-right b {
+      font-weight: 400;
+      color: #0068b7;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="pd-shipping-con">
+    <div class="pd-box-header">
+      <h2>Shipping to:</h2>
+    </div>
+    <div class="pd-box-body">
+      <div class="pd-box-select">
+        <span class="b2-icon">
+          <svg class="" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M7.58578644,15.0857864 C8.3257272,14.3458457 9.50121136,14.3069014 10.2869988,14.9689537 L10.4142136,15.0857864 L22.7707813,24.713268 C23.4935224,25.2763836 24.5064776,25.2763836 25.2292187,24.713268 L37.5857864,15.0857864 C38.3257272,14.3458457 39.5012114,14.3069014 40.2869988,14.9689537 L40.4142136,15.0857864 C41.1541543,15.8257272 41.1930986,17.0012114 40.5310463,17.7869988 L40.4142136,17.9142136 L25.4142136,32.9142136 C24.6742728,33.6541543 23.4987886,33.6930986 22.7130012,33.0310463 L22.5857864,32.9142136 L7.58578644,17.9142136 C6.80473785,17.133165 6.80473785,15.866835 7.58578644,15.0857864 Z">
+            </path>
+          </svg>
+        </span>
+        <select class="pd-shipping-select" data-country-select>
+
+        </select>
+      </div>
+      <div class="pd-box-table" data-date-table></div>
+    </div>
+  </div>
+
+
+  <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+  <script>
+    $(function () {
+
+      const list = [
+        {
+          area: '中华人民共和国',
+          date: [
+            {
+              label: '普通',
+              min: 3,
+              max: 5
+            },
+            {
+              label: '正常',
+              min: 2,
+              max: 6
+            },
+            {
+              label: '特快',
+              min: 2,
+              max: 6
+            }
+          ]
+        },
+        {
+          area: '日本',
+          date: [
+            {
+              label: '普通',
+              min: 3,
+              max: 5
+            },
+            {
+              label: '正常',
+              min: 2,
+              max: 6
+            },
+            {
+              label: '特快',
+              min: 3,
+              max: 8
+            }
+          ]
+        },
+        {
+          area: '美国',
+          date: [
+            {
+              label: '普通',
+              min: 1,
+              max: 2
+            },
+            {
+              label: '正常',
+              min: 4,
+              max: 6
+            }
+          ]
+        }
+      ]
+      const tag = 'ptime-2-5'
+
+
+      // 下拉框回填数据
+      let selectOptions = list.map(item => {
+        return `<option value="${item.area}" selected="">${item.area}</option>`
+      })
+      $("[data-country-select]").html(selectOptions.join(''))
+
+      // 下拉框选择
+      $("[data-country-select]").change(function () {
+        updateDate(list, tag, $(this).val())
+      })
+
+      updateDate(list, tag, list[0].area)
+
+    })
+
+
+    // 获取当前日期
+    function getDateInfo(list, tag, country) {
+      const curCountry = list.find(item => item.area === country)
+      const timeReg = /ptime-(\d)-(\d)/
+      const timeRes = tag.match(timeReg)
+      if (timeRes) {
+        const finalData = {
+          area: curCountry.area,
+          date: curCountry.date.map(item => {
+            const { min, max, label } = item
+            return {
+              label,
+              // eslint-disable-next-line no-undef
+              start: dayjs(dayjs().add(Number(min) + Number(timeRes[1]), 'day')).format('DD/MM/YYYY'),
+              // eslint-disable-next-line no-undef
+              end: dayjs(dayjs().add(Number(max) + Number(timeRes[2]), 'day')).format('DD/MM/YYYY')
+            }
+          })
+        }
+        return finalData;
+      }
+    }
+
+    // 更新日期
+    function updateDate(list, tag, country) {
+      const res = getDateInfo(list, tag, country)
+
+      let dateStr = res.date.map(item => {
+        return `
+        <div class="table-row">
+          <span class="table-left">${item.label}</span>
+          <span class="table-right">Estimated To Be Delivered On<b>${item.start} - ${item.end}</b></span>
+        </div>
+  `
+      })
+      $("[data-date-table]").html(dateStr.join(''))
+    }
+  </script>
+</body>
+
+</html>
